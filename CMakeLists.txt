@@ -72,7 +72,12 @@ target_include_directories(bulk_server
 #)
 
 
-target_link_libraries(bulk_server ${Boost_LIBRARIES})
+
+target_link_libraries(bulk_server 
+  ${Boost_LIBRARIES}
+  pthread
+)
+
 
 
 if (MSVC)
