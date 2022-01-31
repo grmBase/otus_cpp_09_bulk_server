@@ -111,5 +111,5 @@ int tcp_connect::handle_some(const char* ap_data, std::size_t a_un_size)
   m_buf_not_ready_yet = str_curr; // запоминаем остаток
 
   return 0;
-};
+}
 //---------------------------------------------------------------------------

@@ -46,7 +46,7 @@ void t_sync_console::logout(const std::string_view& astr_info)
 #ifdef DBG_LOGGING
   gp_log->logout_inst(astr_info);
 #endif
-};
+}
 //---------------------------------------------------------------------------
 
 void t_sync_console::log_info(const std::string_view& astr_info)
@@ -54,7 +54,7 @@ void t_sync_console::log_info(const std::string_view& astr_info)
 #ifdef DBG_LOGGING
   gp_log->log_info_inst(astr_info);
 #endif
-};
+}
 //---------------------------------------------------------------------------
 
 void t_sync_console::log_err(const std::string_view& astr_info)
@@ -62,5 +62,5 @@ void t_sync_console::log_err(const std::string_view& astr_info)
 #ifdef DBG_LOGGING
   gp_log->log_err_inst(astr_info);
 #endif
-};
+}
 //---------------------------------------------------------------------------

@@ -38,7 +38,7 @@ int t_server::start_listen()
   do_accept();
 
   return 0;
-};
+}
 //---------------------------------------------------------------------------
 
 void t_server::do_accept()
@@ -77,7 +77,7 @@ int t_server::run()
   t_sync_console::logout("after all working threads has been started");
 
   return 0;
-};
+}
 //---------------------------------------------------------------------------
 
 
@@ -88,7 +88,7 @@ int t_server::stop()
   t_sync_console::logout("after stop() io_context");
 
   return 0;
-};
+}
 //---------------------------------------------------------------------------
 
 
