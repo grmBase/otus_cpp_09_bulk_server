@@ -16,12 +16,16 @@ set(Boost_USE_STATIC_RUNTIME OFF)
 
 
 
-find_package(Boost REQUIRED COMPONENTS asio)
+# тут не надо - asio он header only
+#find_package(Boost REQUIRED COMPONENTS asio)
+
+include_directories(${Boost_INCLUDE_DIR})
 
 
 
 # имя основной утилиты будет таким же как и имя проекта?
 add_executable(bulk_server
+src/bulk_server.cpp
 src/bulk_machine.cpp
 src/global_place.cpp
 src/server.cpp
@@ -66,6 +70,9 @@ target_include_directories(bulk_server
 #    ${Boost_LIBRARIES}
 #    helloworld
 #)
+
+
+target_link_libraries(bulk_server ${Boost_LIBRARIES})
 
 
 if (MSVC)
