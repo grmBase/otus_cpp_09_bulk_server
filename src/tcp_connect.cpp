@@ -37,6 +37,10 @@ void tcp_connect::tcp_connect::do_read()
 
       // обрабатываем:
       int n_err = handle_some((const char*)m_buf, a_readed);
+      if(n_err) {
+        t_sync_console::log_err("error in handle_some()");
+        //return; - будем продолжать читать пока
+      }
 
       // Мы ничего не отвечаем в ответ, поэтому просто продолжаем запрашивать чего-нибудь на чтение:
       do_read();
