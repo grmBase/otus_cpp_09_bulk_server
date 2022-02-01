@@ -110,9 +110,11 @@ void impl::t_bulk_machine::print_batch_and_clear()
   }
 
 
-  // пока так пойдёт. Не знаю зачем там ещё наворачивать пулы:
-  clog::logout(str_bulk);
+  // выведем в консоль:
+  clog::log_info_always(str_bulk);
 
+
+  // сохраняем в файл:
   int n_res = save_to_file(str_bulk);
   if (n_res) {
     clog::log_err("Error in save_to_file()");

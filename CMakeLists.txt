@@ -97,9 +97,9 @@ if (MSVC)
         /W4
     )
 else ()
-    target_compile_options(bulk_server PRIVATE
-        -Wall -Wextra -pedantic -Werror
-    )
+    #target_compile_options(bulk_server PRIVATE
+    #    -Wall -Wextra -pedantic -Werror
+    #)
 endif()
 
 

@@ -19,6 +19,9 @@ namespace clog
   void logout(const std::string_view& astr_info);
   void log_info(const std::string_view& astr_info);
   void log_err(const std::string_view& astr_info);
+
+  // чтобы выводилось всегда - там по заданию нужно в консоль
+  void log_info_always(const std::string_view& astr_info);
 }
 
 
@@ -27,12 +30,13 @@ class t_sync_console
 {
 public:
 
- 
   void logout_inst(const std::string_view& astr_info);
 
-  void log_info_inst(const std::string_view& astr_info);
   void log_err_inst(const std::string_view& astr_info);
 
+
+
+  void log_info_inst(const std::string_view& astr_info);
 
 private:
 
