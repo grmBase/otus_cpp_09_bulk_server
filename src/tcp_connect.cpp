@@ -146,5 +146,5 @@ int tcp_connect::handle_ready_str(const std::string& astr_data)
   m_server.handle_instruction(astr_data);
 
   return 0;
-};
+}
 //---------------------------------------------------------------------------
