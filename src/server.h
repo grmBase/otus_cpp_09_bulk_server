@@ -38,7 +38,7 @@ class t_server
 
 
     // *********** данные ***************
-    uint16_t m_port;
+    //uint16_t m_port;
 
     // основной объект asio
     boost::asio::io_context m_io_context;
@@ -56,6 +56,9 @@ class t_server
 
     // машина построчной отработки логики пачек
     impl::t_bulk_machine m_machine;
+
+    // ещё раз сохраним
+    size_t m_batch_size;
 
 };
 //---------------------------------------------------------------------------

@@ -25,13 +25,17 @@ include_directories(${Boost_INCLUDE_DIR})
 
 # имя основной утилиты будет таким же как и имя проекта?
 add_executable(bulk_server
-src/bulk_server.cpp
-src/bulk_machine.cpp
-src/global_place.cpp
-src/server.cpp
-src/sync_console.cpp
-src/tcp_connect.cpp
+  src/main.cpp
+  src/bulk_machine.cpp
+  src/global_place.cpp
+  src/server.cpp
+  src/sync_console.cpp
+  src/tcp_connect.cpp
 )
+
+
+set_target_properties(bulk_server 
+  PROPERTIES VS_DEBUGGER_COMMAND_ARGUMENTS "localhost 4000") 
 
 
 set_target_properties(bulk_server PROPERTIES
@@ -75,8 +79,16 @@ target_include_directories(bulk_server
 
 target_link_libraries(bulk_server 
   ${Boost_LIBRARIES}
-  pthread
 )
+
+
+# для linux нужно ещё pthread:
+if (CMAKE_SYSTEM_NAME STREQUAL "Linux")
+  target_link_libraries(bulk_server 
+    pthread
+  )
+endif ()
+
 
 
 

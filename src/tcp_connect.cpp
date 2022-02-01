@@ -8,9 +8,12 @@
 //---------------------------------------------------------------------------
 
 
-tcp_connect::tcp_connect(boost::asio::ip::tcp::socket a_socket, t_server& a_server)
+tcp_connect::tcp_connect(boost::asio::ip::tcp::socket a_socket, t_server& a_server,
+  size_t a_bulk_size)
   : m_socket(std::move(a_socket)), 
+    m_machine(a_bulk_size),
     m_server(a_server)
+
 {
 }
 //---------------------------------------------------------------------------
@@ -29,16 +32,16 @@ void tcp_connect::tcp_connect::do_read()
     [this, self](boost::system::error_code a_error, std::size_t a_readed)
     {
       if(a_error) {
-        t_sync_console::log_err("error in asyn_read_some(). code: " + std::to_string(a_error.value()) + ", transl: " + a_error.message());
+        clog::log_err("error in asyn_read_some(). code: " + std::to_string(a_error.value()) + ", transl: " + a_error.message());
         return; 
       }
      
-      t_sync_console::logout("num received: " + std::to_string(a_readed) + ", content: " + std::string{ (char*)m_buf, a_readed });
+      clog::logout("num received: " + std::to_string(a_readed) + ", content: " + std::string{ (char*)m_buf, a_readed });
 
       // обрабатываем:
       int n_err = handle_some((const char*)m_buf, a_readed);
       if(n_err) {
-        t_sync_console::log_err("error in handle_some()");
+        clog::log_err("error in handle_some()");
         //return; - будем продолжать читать пока
       }
 
@@ -58,11 +61,11 @@ void tcp_connect::do_write(std::size_t a_len)
     [this, self](boost::system::error_code a_error, std::size_t a_written)
     {
       if(a_error) {
-        t_sync_console::log_err("error in async_write(). code: " + std::to_string(a_error.value()) + ", transl: " + a_error.message());
+        clog::log_err("error in async_write(). code: " + std::to_string(a_error.value()) + ", transl: " + a_error.message());
         return;
       }
 
-      t_sync_console::logout("num written: " + std::to_string(a_written) + ", content: " + std::string{ (char*)m_buf, a_written });
+      clog::logout("num written: " + std::to_string(a_written) + ", content: " + std::string{ (char*)m_buf, a_written });
 
       do_read();
     });
@@ -92,7 +95,7 @@ int tcp_connect::handle_some(const char* ap_data, std::size_t a_un_size)
     if (iter2 != std::string::npos) {
       std::string str_new_to_handle = str_curr.substr(0, iter2);
 
-      m_server.handle_instruction(str_new_to_handle);
+      handle_ready_str(str_new_to_handle);
 
       str_curr = str_curr.substr(iter2 + std::strlen("\r\n"), std::string::npos);
 
@@ -103,7 +106,7 @@ int tcp_connect::handle_some(const char* ap_data, std::size_t a_un_size)
     if (iter1 != std::string::npos) {
       std::string str_new_to_handle = str_curr.substr(0, iter1);
 
-      m_server.handle_instruction(str_new_to_handle);
+      handle_ready_str(str_new_to_handle);
 
       str_curr = str_curr.substr(iter1 + std::strlen("\r"), std::string::npos);
 
@@ -116,4 +119,32 @@ int tcp_connect::handle_some(const char* ap_data, std::size_t a_un_size)
 
   return 0;
 }
+//---------------------------------------------------------------------------
+
+
+// обработка целой строки
+int tcp_connect::handle_ready_str(const std::string& astr_data)
+{
+
+  // если уже в собственном динамическом блоке, то обрабтаываем, выходим:
+  if(m_machine.is_in_dyn_block_handling()) {
+
+    clog::logout("in dyn block");
+    m_machine.handle_instruction(astr_data);
+    return 0;
+  }
+
+  // есть ли данная инструкция начало динамического блока?
+  if(impl::t_bulk_machine::is_it_start_block_instr(astr_data)) {
+    clog::logout("it is start of dyn block");
+    m_machine.handle_instruction(astr_data);
+    return 0;
+  }
+
+  // если тут, то это обычные инструкции, их обрабатываем одним экземпляром:
+  clog::logout("it is regular string. Sending to main machine. str_data: " + astr_data);
+  m_server.handle_instruction(astr_data);
+
+  return 0;
+};
 //---------------------------------------------------------------------------

@@ -27,7 +27,7 @@ impl::t_bulk_machine::t_bulk_machine(size_t aun_stat_bulk_size)
 impl::t_bulk_machine::~t_bulk_machine()
 {
   if(m_vec_buffer.size()) {
-    t_sync_console::logout("<< eof detected. so purging final batch if any:");
+    clog::logout("<< eof detected. so purging final batch if any:");
     print_batch_and_clear();
   }
 }
@@ -38,7 +38,7 @@ void impl::t_bulk_machine::handle_instruction(const std::string& astr_inst)
 {
 
   if (!astr_inst.length()) {
-    t_sync_console::log_err("empty string in handle_instruction()");
+    clog::log_err("empty string in handle_instruction()");
     return;
   };
 
@@ -47,27 +47,27 @@ void impl::t_bulk_machine::handle_instruction(const std::string& astr_inst)
 
     // if we were in regular block:
     if (m_un_dyn_depth == 0) {
-      t_sync_console::logout("comming dyn block, so purgint regular one if any:");
+      clog::logout("comming dyn block, so purgint regular one if any:");
       print_batch_and_clear();
     }
 
     m_un_dyn_depth++;
-    t_sync_console::logout("new dyn depth: " + std::to_string(m_un_dyn_depth));
+    clog::logout("new dyn depth: " + std::to_string(m_un_dyn_depth));
     return;
   }
 
   if (astr_inst == "}") {
     if (m_un_dyn_depth >= 1) {
       m_un_dyn_depth--;
-      t_sync_console::logout("} detected. new depth: " + std::to_string(m_un_dyn_depth));
+      clog::logout("} detected. new depth: " + std::to_string(m_un_dyn_depth));
     }
     else {
       // todo: hope test input will come in correct order. Otherwise ask how to handle such case
-      t_sync_console::logout("some protocol violation detected. extra closing bracket. just ignored so far");
+      clog::logout("some protocol violation detected. extra closing bracket. just ignored so far");
     }
 
     if (m_un_dyn_depth == 0) {
-      t_sync_console::logout("dyn block is finished. printing content: ");
+      clog::logout("dyn block is finished. printing content: ");
       print_batch_and_clear();
     }
 
@@ -81,7 +81,7 @@ void impl::t_bulk_machine::handle_instruction(const std::string& astr_inst)
   if (m_un_dyn_depth == 0) {
     if (m_vec_buffer.size() >= m_un_stat_buld_size) {
 
-      t_sync_console::logout("<< regular batch ready ----------");
+      clog::logout("<< regular batch ready ----------");
       print_batch_and_clear();
     }
   }
@@ -95,6 +95,11 @@ void impl::t_bulk_machine::handle_instruction(const std::string& astr_inst)
 void impl::t_bulk_machine::print_batch_and_clear()
 {
 
+  if(!m_vec_buffer.size()) {
+    clog::logout("nothing to purge, skipped");
+    return;
+  }
+
   std::string str_bulk;
   for(auto& curr : m_vec_buffer)
   {
@@ -106,11 +111,11 @@ void impl::t_bulk_machine::print_batch_and_clear()
 
 
   // пока так пойдёт. Не знаю зачем там ещё наворачивать пулы:
-  t_sync_console::logout(str_bulk);
+  clog::logout(str_bulk);
 
   int n_res = save_to_file(str_bulk);
   if (n_res) {
-    t_sync_console::log_err("Error in save_to_file()");
+    clog::log_err("Error in save_to_file()");
   }
 
 
@@ -148,7 +153,7 @@ int impl::t_bulk_machine::save_to_file(const std::string& astr_info)
     un_postfix++;
   }
 
-  t_sync_console::logout(">> filename to save: " + str_filename);
+  clog::logout(">> filename to save: " + str_filename);
 
   std::ofstream file;
 
@@ -159,3 +164,24 @@ int impl::t_bulk_machine::save_to_file(const std::string& astr_info)
   return 0;
 }
 //---------------------------------------------------------------------------
+
+
+// узнать находимся ли мы в процессе обработки динамического блока
+bool impl::t_bulk_machine::is_in_dyn_block_handling()
+{
+  return m_un_dyn_depth;
+}
+//---------------------------------------------------------------------------
+
+
+// узнать есть ли данная строка начало динамического блока:
+bool impl::t_bulk_machine::is_it_start_block_instr(const std::string& astr_instr)
+{
+  if (astr_instr == "{") {
+    return true;
+  }
+
+  return false;
+}
+//---------------------------------------------------------------------------
+

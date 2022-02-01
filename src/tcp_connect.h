@@ -3,6 +3,8 @@
 //---------------------------------------------------------------------------
 #include <boost/asio.hpp>
 //---------------------------------------------------------------------------
+#include "bulk_machine.h"
+//---------------------------------------------------------------------------
 class t_server;
 //---------------------------------------------------------------------------
 const size_t c_un_buf_length = 1024;
@@ -15,7 +17,9 @@ class tcp_connect : public std::enable_shared_from_this<tcp_connect>
 
 public:
 
-  tcp_connect(boost::asio::ip::tcp::socket a_socket, t_server& a_server);
+  tcp_connect(boost::asio::ip::tcp::socket a_socket, 
+    t_server& a_server, 
+    size_t a_bulk_size);
 
   void start();
 
@@ -31,6 +35,9 @@ private:
   int handle_some(const char* ap_data, std::size_t a_un_size);
 
 
+  // обработка целой строки
+  int handle_ready_str(const std::string& astr_data);
+
 
   // ********************** Данные *******************************
 
@@ -42,7 +49,18 @@ private:
   // строчка, которая ещё не готова:
   std::string m_buf_not_ready_yet;
 
-  // ссылка на основной сервер, чтобы всякие вычитанные строки отправлять на обработку
+
+
+  // машина построчной отработки логики пачек
+  // эта уже "собственная" для этого потока для обработки
+  // динамических блоков
+  impl::t_bulk_machine m_machine;
+
+
+
+
+  // ссылка на основной сервер, там у нас одна общая на всех машина обработки
+  // "обычных" пачек
   t_server& m_server;
 };
 //---------------------------------------------------------------------------

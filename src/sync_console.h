@@ -14,6 +14,14 @@ extern t_sync_console* gp_log;
 
 
 
+namespace clog
+{
+  void logout(const std::string_view& astr_info);
+  void log_info(const std::string_view& astr_info);
+  void log_err(const std::string_view& astr_info);
+}
+
+
 
 class t_sync_console
 {
@@ -24,11 +32,6 @@ public:
 
   void log_info_inst(const std::string_view& astr_info);
   void log_err_inst(const std::string_view& astr_info);
-
-
-  static void logout(const std::string_view& astr_info);
-  static void log_info(const std::string_view& astr_info);
-  static void log_err(const std::string_view& astr_info);
 
 
 private:

@@ -1,0 +1,3 @@
+#!/bin/bash
+
+cat test2_data | nc localhost 4000

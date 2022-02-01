@@ -25,6 +25,14 @@ class t_bulk_machine
     // обрабатываем новую строку:
     void handle_instruction(const std::string& astr);
 
+
+
+    // узнать находимся ли мы в процессе обработки динамического блока
+    bool is_in_dyn_block_handling();
+    // узнать есть ли данная строка начало динамического блока:
+    static bool is_it_start_block_instr(const std::string& astr_instr);
+
+
   private:
 
     // выводим текущий буфер куда надо (в файл, в консоль...)

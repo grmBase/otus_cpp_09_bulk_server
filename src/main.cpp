@@ -41,26 +41,32 @@ int main(int argc, char* argv[])
 
 
 
-    t_sync_console::logout("before server.run()");
+    clog::logout("before server.run()");
 
     n_res = server.run();
     if (n_res) {
-      t_sync_console::log_err("error in run()");
+      clog::log_err("error in run()");
       return n_res;
     }
-    t_sync_console::logout("server.run() passed OK");
+    clog::logout("server.run() passed OK");
 
-    t_sync_console::logout("press any key to exit");
-    std::getchar();
+    clog::logout("press any key to exit");
 
-    t_sync_console::logout("going to stop. Before server.stop()");
+    do{
+       std::cout << '\n' << "Press a key to continue...";
+    } while (std::cin.get() != '\n');
+
+    //int n_button = std::getchar();
+    //clog::logout("pressed key: " + std::to_string(n_button));
+
+    clog::logout("going to stop. Before server.stop()");
     server.stop();
 
-    t_sync_console::logout("after stop");
+    clog::logout("after stop");
   }
   catch(const std::exception& aexc)
   {
-    t_sync_console::log_err("caught exeption: " + std::string(aexc.what()));
+    clog::log_err("caught exeption: " + std::string(aexc.what()));
     return -33;
   }
 
