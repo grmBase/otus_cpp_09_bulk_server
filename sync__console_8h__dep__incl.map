@@ -1,9 +1,9 @@
 <map id="src/sync_console.h" name="src/sync_console.h">
-<area shape="rect" id="node1" title=" " alt="" coords="413,5,546,32"/>
+<area shape="rect" id="node1" title=" " alt="" coords="385,5,518,32"/>
 <area shape="rect" id="node2" href="$bulk__machine_8cpp.html" title=" " alt="" coords="5,80,153,107"/>
-<area shape="rect" id="node3" href="$bulk__server_8cpp.html" title=" " alt="" coords="177,80,312,107"/>
-<area shape="rect" id="node4" href="$global__place_8cpp.html" title=" " alt="" coords="336,80,476,107"/>
-<area shape="rect" id="node5" href="$server_8cpp.html" title=" " alt="" coords="501,80,605,107"/>
-<area shape="rect" id="node6" href="$sync__console_8cpp.html" title=" " alt="" coords="629,80,775,107"/>
-<area shape="rect" id="node7" href="$tcp__connect_8cpp.html" title=" " alt="" coords="799,80,938,107"/>
+<area shape="rect" id="node3" href="$global__place_8cpp.html" title=" " alt="" coords="177,80,317,107"/>
+<area shape="rect" id="node4" href="$main_8cpp.html" title=" " alt="" coords="342,80,438,107"/>
+<area shape="rect" id="node5" href="$server_8cpp.html" title=" " alt="" coords="462,80,566,107"/>
+<area shape="rect" id="node6" href="$sync__console_8cpp.html" title=" " alt="" coords="590,80,737,107"/>
+<area shape="rect" id="node7" href="$tcp__connect_8cpp.html" title=" " alt="" coords="761,80,899,107"/>
 </map>

@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['impl_0',['impl',['../namespaceimpl.html',1,'']]]
+  ['clog_0',['clog',['../namespaceclog.html',1,'']]]
 ];
